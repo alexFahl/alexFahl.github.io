@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Fahloune | Portfolio</title>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.26.9/babel.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #060709;
+      --bg-surface: rgba(13, 16, 23, 0.45);
+      --border-color: rgba(255, 255, 255, 0.07);
+      --border-hover: rgba(255, 255, 255, 0.15);
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-dim: #64748b;
+
+      /* Palette Premium Cyber-Minimalist */
+      --accent-cyan: #38bdf8;
+      --accent-emerald: #34d399;
+      --accent-amber: #fbbf24;
+      --accent-indigo: #818cf8;
+      --accent-rose: #f43f5e;
+      
+      /* Transitions optimisées */
+      --transition-smooth: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+      --transition-bounce: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease, color 0.3s ease;
+      
+      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+
+    /* THEME CLAIR */
+    body.light-mode {
+      --bg-base: #f0f4f8;
+      --bg-surface: rgba(255, 255, 255, 0.65);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(0, 0, 0, 0.15);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-dim: #94a3b8;
+    }
+
+    body.light-mode .bg-ambient { background: radial-gradient(circle at 50% 50%, #e2e8f0 0%, #cbd5e1 100%); }
+    body.light-mode .orb { opacity: 0.6; }
+    body.light-mode .bg-grid {
+      background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    }
+    
+    body.light-mode h2.section-heading { background: linear-gradient(135deg, #0f172a 30%, #64748b 100%); -webkit-background-clip: text; }
+    body.light-mode .hero-name { background: linear-gradient(to right, #0f172a, #334155, #64748b); -webkit-background-clip: text; }
+    body.light-mode .timeline-role, body.light-mode .skill-category-title, body.light-mode .project-title, body.light-mode .contact-icon-box { color: #0f172a; }
+    body.light-mode .premium-card { box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1); }
+    body.light-mode .premium-card:hover { box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5); }
+    body.light-mode .nav-arrow { background: #111111; color: #ffffff; border-color: rgba(0, 0, 0, 0.5); box-shadow: 0 5px 15px rgba(0,0,0,0.25); }
+    body.light-mode .nav-arrow:hover { background: #000000; color: #ffffff; border-color: #000000; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); }
+
+
+    body.light-mode .dock-container {
+      background: rgba(15, 17, 22, 0.9);
+      border-color: rgba(0, 0, 0, 0.8);
+      box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    body.light-mode .dock-btn { background: rgba(40, 42, 48, 0.8); color: #f8fafc; border-color: rgba(255, 255, 255, 0.05); }
+    body.light-mode .dock-btn:hover, body.light-mode .dock-btn.is-active { background: #ffffff; color: #000000; }
+    body.light-mode .dock-separator { background: rgba(255, 255, 255, 0.2); }
+    body.light-mode .dock-btn::after { background: #ffffff; color: #000000; }
+
+    /* Règles de base */
+    * { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-base);
+      color: var(--text-primary); overflow: hidden; height: 100vh; width: 100vw;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* === CURSEUR GÉANT === */
+    .cursor-pointer {
+      position: fixed; top: 0; left: 0; width: 44px; height: 44px; pointer-events: none; z-index: 9999; margin: -2px 0 0 -2px;
+    }
+    .cursor-pointer svg {
+      width: 100%; height: 100%; fill: #ffffff; stroke: #060709; stroke-width: 2px; stroke-linejoin: round;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); transition: fill 0.4s ease, stroke 0.4s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: 2px 2px;
+    }
+    body.light-mode .cursor-pointer svg { fill: #0f172a; stroke: #ffffff; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+    body:has(a:hover, button:hover, .dock-btn:hover, .nav-arrow:hover) .cursor-pointer svg { transform: scale(0.85); }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .bg-ambient {
+      position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, #0a0c10 0%, #050608 100%); transform: translateZ(0); transition: background 0.3s ease;
+    }
+    .orb { position: absolute; border-radius: 50%; opacity: 0.8; will-change: transform; animation: drift 30s ease-in-out infinite alternate; transform: translateZ(0); pointer-events: none; }
+    .orb-1 { top: -10%; left: 10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(129, 140, 248, 0.25) 0%, rgba(129, 140, 248, 0) 60%); }
+    .orb-2 { bottom: -10%; right: 5%; width: 45vw; height: 45vw; background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(56, 189, 248, 0) 60%); animation-delay: -5s; }
+    .orb-3 { top: 40%; left: 60%; width: 35vw; height: 35vw; background: radial-gradient(circle, rgba(244, 63, 94, 0.2) 0%, rgba(244, 63, 94, 0) 60%); animation-delay: -10s; }
+
+    @keyframes drift { 0% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(2%, 3%, 0) scale(1.05); } 100% { transform: translate3d(-1%, -2%, 0) scale(0.95); } }
+
+    .bg-grid {
+      position: fixed; inset: 0; z-index: -1;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px; mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 40%, transparent 100%); transform: translateZ(0); pointer-events: none;
+    }
+
+    .carousel-wrapper {
+      display: flex; width: 100vw; height: 100vh; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch; transform: translateZ(0);
+    }
+    .carousel-wrapper::-webkit-scrollbar { display: none; }
+
+    .slide-section {
+      flex: 0 0 100vw; width: 100vw; height: 100vh; scroll-snap-align: center; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+      padding: 100px 10vw 140px; overflow-y: auto; position: relative;
+    }
+    .slide-content { width: 100%; max-width: 1100px; opacity: 0; transform: translate3d(0, 20px, 0); transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); margin-top: 0; margin-bottom: auto; }
+    .slide-section.active-slide .slide-content { opacity: 1; transform: translate3d(0, 0, 0); }
+
+    /* ========================================================= */
+    /* === NOUVEL ACCUEIL : DASHBOARD LAYOUT === */
+    /* ========================================================= */
+    
+    .home-wrapper {
+      width: 100%; max-width: 1100px; margin: 0 auto;
+    }
+
+    .home-dashboard {
+      display: flex; flex-direction: column; gap: 1.5rem; width: 100%;
+    }
+
+    /* Ligne du Haut : Hero + Boutons Profil/Contact */
+    .home-top-row {
+      display: flex; gap: 1.5rem; width: 100%; align-items: stretch;
+    }
+
+    .home-hero-panel {
+      flex: 1; display: flex; align-items: center;
+    }
+
+    .home-side-actions {
+      display: flex; flex-direction: column; gap: 1.5rem; width: 180px; flex-shrink: 0;
+    }
+
+    .home-action-btn {
+      flex: 1; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px; cursor: none !important;
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+    }
+    .home-action-btn i { font-size: 2rem; color: var(--text-secondary); transition: all 0.4s ease; }
+    .home-action-btn span { font-family: 'Space Grotesk', sans-serif; font-size: clamp(0.95rem, 2.5vw, 1.1rem); font-weight: 700; color: var(--text-secondary); transition: all 0.4s ease; }
+    
+    .home-action-btn:hover {
+      background: rgba(255, 255, 255, 0.05); border-color: var(--accent-indigo); transform: translateY(-4px) scale(1.02); box-shadow: 0 20px 40px -10px rgba(129, 140, 248, 0.2);
+    }
+    .home-action-btn:hover i { color: var(--accent-indigo); transform: translateY(-3px); }
+    .home-action-btn:hover span { color: #fff; }
+
+    /* Ligne du Bas : Flex Fixe */
+    .home-expand-row {
+      display: flex; gap: 1.5rem; height: 220px; width: 100%;
+    }
+
+    .home-expand-card {
+      flex: 1; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); position: relative; overflow: hidden;
+      cursor: none !important; 
+      transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+      display: flex; justify-content: center; align-items: center;
+    }
+    .home-expand-card:hover {
+      border-color: var(--accent-cyan); background: rgba(255, 255, 255, 0.05); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(56, 189, 248, 0.2);
+    }
+
+    .expand-content-wrapper {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; width: 100%;
+    }
+
+    .expand-icon { font-size: 2.5rem; color: var(--text-secondary); transition: color 0.4s ease, transform 0.4s ease; }
+    .home-expand-card:hover .expand-icon { color: var(--accent-cyan); transform: translateY(-5px); }
+
+    .expand-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: clamp(1rem, 2.5vw, 1.2rem); font-weight: 700; color: var(--text-secondary);
+      white-space: nowrap; transition: color 0.4s ease;
+    }
+    .home-expand-card:hover .expand-title { color: #fff; }
+
+    /* Light Mode du Dashboard Accueil */
+    body.light-mode .home-action-btn, body.light-mode .home-expand-card {
+      background: rgba(255, 255, 255, 0.7); border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+    body.light-mode .home-action-btn:hover {
+      background: #ffffff; border-color: var(--accent-indigo); box-shadow: 0 20px 40px -10px rgba(129, 140, 248, 0.3);
+    }
+    body.light-mode .home-action-btn:hover span, body.light-mode .home-action-btn:hover i { color: var(--accent-indigo); }
+    body.light-mode .home-expand-card:hover {
+      background: #ffffff; border-color: var(--accent-cyan); box-shadow: 0 20px 40px -10px rgba(56, 189, 248, 0.3);
+    }
+    body.light-mode .home-expand-card:hover .expand-title, body.light-mode .home-expand-card:hover .expand-icon { color: var(--accent-cyan); }
+    body.light-mode .expand-title, body.light-mode .home-action-btn span { color: #0f172a; }
+
+    /* ========================================================= */
+
+    .nav-arrow {
+      position: fixed; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.92); border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #0a0c10; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; z-index: 900; transition: var(--transition-bounce); box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .nav-arrow:hover { color: #0a0c10; background: #ffffff; border-color: #ffffff; transform: translateY(-50%) scale(1.1); box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15); }
+    .nav-arrow-left { left: 2vw; } .nav-arrow-right { right: 5vw; }
+
+    h2.section-heading { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.9rem, 5vw, 2.8rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 2.5rem; background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 14px; }
+    h2.section-heading i { font-size: clamp(1.4rem, 3.5vw, 2rem); background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .premium-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 2.5rem; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3); transition: var(--transition-smooth); transform: translateZ(0); }
+    .premium-card:hover { border-color: var(--border-hover); }
+
+    /* Ensure the same hover translate+scale effect applies in dark mode */
+    body:not(.light-mode) .premium-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 12px 30px -12px rgba(56, 189, 248, 0.06), 0 6px 18px rgba(0,0,0,0.35);
+    }
+
+    /* Apply the translate+scale effect only for specific sections */
+    #skills .premium-card:hover,
+    #education .premium-card:hover,
+    #projects .premium-card:hover {
+      transform: translate3d(0, -2px, 0) scale(1.07);
+    }
+
+    .hero-container { display: flex; align-items: center; gap: 3.5rem; text-align: left; margin: 0; width: 100%; }
+    .hero-avatar-wrapper { position: relative; flex-shrink: 0; }
+    .hero-avatar-wrapper::before { content: ''; position: absolute; inset: -8px; border-radius: 50%; background: conic-gradient(from 0deg, var(--accent-cyan), var(--accent-indigo), var(--accent-rose), var(--accent-cyan)); opacity: 0.3; filter: blur(6px); animation: spin 15s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .hero-avatar { width: 220px; height: 220px; border-radius: 50%; object-fit: cover; position: relative; z-index: 1; border: 4px solid var(--bg-base); transition: border-color 0.3s ease; }
+    .hero-greet { font-size: clamp(0.95rem, 2.5vw, 1.15rem); font-weight: 500; color: var(--text-secondary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .hero-name { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.4rem, 8vw, 4rem); font-weight: 700; line-height: 1; letter-spacing: -0.04em; margin-bottom: 1rem; background: linear-gradient(to right, #ffffff, #cbd5e1, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-role { font-size: clamp(1.15rem, 4vw, 1.6rem); font-weight: 600; color: var(--accent-cyan); margin-bottom: 1.5rem; }
+
+    .badge-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .premium-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 100px; font-size: 0.85rem; font-weight: 600; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); color: var(--text-primary); transition: background 0.3s, border-color 0.3s, color 0.3s ease; }
+    .premium-badge i { color: var(--accent-cyan); }
+    .premium-badge.status-available { color: var(--accent-emerald); border-color: rgba(52, 211, 153, 0.2); background: rgba(52, 211, 153, 0.05); }
+    .premium-badge.status-available .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-emerald); box-shadow: 0 0 8px rgba(52, 211, 153, 0.5); animation: pulse 2.5s infinite; }
+    @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.6; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.6; } }
+
+    .premium-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+    .skill-category-card { position: relative; overflow: hidden; }
+    .skill-category-title { font-size: clamp(1.05rem, 2.5vw, 1.2rem); font-weight: 700; margin-bottom: 1.5rem; color: #ffffff; display: flex; align-items: center; gap: 10px; transition: color 0.3s ease; }
+    .skill-category-title i { color: var(--accent-indigo); }
+    .skill-pool { display: flex; flex-wrap: wrap; gap: 8px; }
+    
+    .skill-tag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 12px; font-size: 0.85rem; font-weight: 500; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-secondary); transition: border-color 0.3s, color 0.3s; }
+    .skill-tag i { font-size: 1.1rem; } 
+    .skill-category-card:hover .skill-tag { border-color: rgba(255, 255, 255, 0.1); color: var(--text-primary); }
+
+    .timeline-container { position: relative; padding-left: 5rem; }
+    .timeline-container::before { content: ''; position: absolute; left: 39px; top: 0px; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-indigo), transparent); opacity: 0.3; }
+    .timeline-node { position: relative; margin-bottom: 3rem; }
+    .timeline-node:last-child { margin-bottom: 0; }
+    .timeline-marker { position: absolute; left: calc(-3.5rem + 7px); top: 6px; width: 18px; height: 18px; border-radius: 50%; background: var(--bg-base); border: 3px solid var(--accent-cyan); z-index: 2; transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease; }
+    .timeline-node:hover .timeline-marker { transform: scale(1.2); border-color: var(--accent-rose); }
+    .timeline-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 10px; }
+    .timeline-date { font-size: 0.85rem; font-weight: 700; color: var(--accent-cyan); background: rgba(56, 189, 248, 0.06); padding: 4px 12px; border-radius: 100px; border: 1px solid rgba(56, 189, 248, 0.15); }
+    .timeline-role { font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 700; color: #ffffff; transition: color 0.3s ease; }
+    .timeline-company { font-size: clamp(0.9rem, 2.2vw, 1rem); color: var(--text-secondary); font-weight: 500; margin-bottom: 0.75rem; }
+    .timeline-desc { font-size: clamp(0.9rem, 2.2vw, 0.95rem); line-height: 1.6; color: var(--text-secondary); }
+    .timeline-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+    .timeline-list li { font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary); display: flex; align-items: baseline; gap: 8px; }
+    .timeline-list li i { font-size: 0.6rem; color: var(--accent-cyan); flex-shrink: 0; position: relative; top: -1px; }
+
+    .project-card {
+      display: flex; flex-direction: column; justify-content: space-between; height: 100%;
+      cursor: none !important; position: relative; overflow: hidden;
+      transition: var(--transition-smooth), border-color 0.3s ease, box-shadow 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .project-card::before {
+      content: ''; position: absolute; inset: 0; border-radius: 24px;
+      background: linear-gradient(135deg, rgba(56,189,248,0.06) 0%, rgba(129,140,248,0.04) 100%);
+      opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 0;
+    }
+    .project-card:hover::before { opacity: 1; }
+    .project-card > * { position: relative; z-index: 1; }
+    .project-card:hover {
+      border-color: rgba(56,189,248,0.45) !important;
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.15), 0 20px 45px -15px rgba(56,189,248,0.25), inset 0 1px 0 rgba(255,255,255,0.07);
+      transform: translate3d(0, -4px, 0) scale(1.02);
+    }
+    body.light-mode .project-card:hover {
+      border-color: rgba(56,189,248,0.5) !important;
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.2), 0 20px 45px -15px rgba(56,189,248,0.2);
+    }
+
+    /* Click hint indicator */
+    .project-card-click-hint {
+      position: absolute; top: 1.4rem; right: 1.4rem; z-index: 2;
+      width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.15);
+      color: rgba(56,189,248,0.4); font-size: 0.75rem;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0; transform: scale(0.7);
+    }
+    .project-card:hover .project-card-click-hint {
+      opacity: 1; transform: scale(1); color: var(--accent-cyan); background: rgba(56,189,248,0.12); border-color: rgba(56,189,248,0.35);
+    }
+
+    /* Project category badge */
+    .project-badge {
+      display: inline-flex; align-items: center; gap: 6px; margin-bottom: 0.9rem;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 6px; line-height: 1;
+    }
+    .project-badge i { font-size: 0.7rem; }
+    .project-badge.is-pro { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); color: var(--accent-emerald); }
+    .project-badge.is-perso { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); color: var(--accent-amber); }
+
+    .project-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.15rem, 3vw, 1.4rem); font-weight: 600; color: #ffffff; margin-bottom: 0.75rem; transition: color 0.3s ease; }
+    .project-card:hover .project-title { color: var(--accent-cyan); }
+    body.light-mode .project-card:hover .project-title { color: var(--accent-cyan); }
+    .project-desc { font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.5rem; flex-grow: 1; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .project-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 0.75rem; font-weight: 600; padding: 4px 12px 4px 8px; border-radius: 8px;
+      background: rgba(129, 140, 248, 0.06); border: 1px solid rgba(129, 140, 248, 0.15); color: var(--accent-indigo);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .project-card:hover .project-tag { background: rgba(129,140,248,0.1); border-color: rgba(129,140,248,0.25); }
+    .project-tag i { font-size: 1rem; }
+
+    /* ========================================================= */
+    /* === PROJECT MODAL === */
+    /* ========================================================= */
+    .project-modal-overlay {
+      position: fixed; inset: 0; z-index: 9000; display: flex; align-items: center; justify-content: center;
+      background: rgba(6, 7, 9, 0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      padding: 24px; opacity: 0; pointer-events: none;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .project-modal-overlay.is-open { opacity: 1; pointer-events: all; }
+    body.light-mode .project-modal-overlay { background: rgba(240,244,248,0.8); }
+
+    .project-modal {
+      width: 100%; max-width: 780px; max-height: 88vh;
+      background: #0d1017; border: 1px solid rgba(255,255,255,0.1); border-radius: 28px;
+      box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(56,189,248,0.08);
+      overflow: hidden; display: flex; flex-direction: column;
+      transform: scale(0.9) translateY(20px); opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+    }
+    body.light-mode .project-modal {
+      background: #ffffff; border-color: rgba(0,0,0,0.08);
+      box-shadow: 0 30px 80px -20px rgba(0,0,0,0.15);
+    }
+    .project-modal-overlay.is-open .project-modal { transform: scale(1) translateY(0); opacity: 1; }
+
+    /* Carousel */
+    .modal-carousel {
+      position: relative; width: 100%; aspect-ratio: 16/7; background: rgba(0,0,0,0.4); flex-shrink: 0; overflow: hidden;
+    }
+    body.light-mode .modal-carousel { background: #e8edf3; }
+
+    .modal-carousel-placeholder {
+      width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+      color: var(--text-dim);
+    }
+    .modal-carousel-placeholder i { font-size: 2.5rem; opacity: 0.3; }
+    .modal-carousel-placeholder span { font-size: 0.85rem; opacity: 0.4; }
+
+    .modal-carousel-track { display: flex; width: 100%; height: 100%; transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+    .modal-carousel-slide { flex: 0 0 100%; width: 100%; height: 100%; object-fit: contain; background: #000; }
+    .modal-carousel-video { width: 100%; height: 100%; object-fit: contain; background: #000; display: block; }
+
+    .modal-carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+      width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(6,7,9,0.65); backdrop-filter: blur(8px); color: #fff; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center; cursor: none !important;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal-carousel-btn:hover { background: var(--accent-cyan); border-color: var(--accent-cyan); color: #000; transform: translateY(-50%) scale(1.1); }
+    .modal-carousel-btn.prev { left: 12px; }
+    .modal-carousel-btn.next { right: 12px; }
+
+    .modal-carousel-dots {
+      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 6px;
+    }
+    .modal-carousel-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.3s ease; cursor: none !important;
+    }
+    .modal-carousel-dot.active { background: var(--accent-cyan); border-color: var(--accent-cyan); transform: scale(1.3); }
+
+    /* Modal body */
+    .modal-body {
+      padding: 2rem 2.5rem 2.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.25rem;
+    }
+    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .modal-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.3rem, 4vw, 1.75rem); font-weight: 700; color: #fff; line-height: 1.2; }
+    body.light-mode .modal-title { color: #0f172a; }
+
+    .modal-close {
+      width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-secondary); font-size: 1.1rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      cursor: none !important; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal-close:hover { background: rgba(244,63,94,0.15); border-color: rgba(244,63,94,0.4); color: var(--accent-rose); transform: scale(1.1) rotate(90deg); }
+    body.light-mode .modal-close { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.1); }
+
+    .modal-desc { font-size: 1rem; line-height: 1.75; color: var(--text-secondary); }
+    .modal-section-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700;
+      color: var(--text-primary); display: flex; align-items: center; gap: 8px; margin-bottom: 0.75rem;
+    }
+    .modal-section-title i { color: var(--accent-cyan); font-size: 0.9rem; }
+    .modal-features-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    .modal-features-list li { font-size: 0.92rem; line-height: 1.5; color: var(--text-secondary); display: flex; align-items: baseline; gap: 8px; }
+    .modal-features-list li i { font-size: 0.6rem; color: var(--accent-cyan); flex-shrink: 0; position: relative; top: -1px; }
+    .modal-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .modal-actions { padding-top: 0.5rem; }
+    .modal-github-btn {
+      display: inline-flex; align-items: center; gap: 10px; padding: 11px 22px; border-radius: 100px;
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600;
+      background: linear-gradient(135deg, #24292e, #3a3f44); color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.12); text-decoration: none;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 6px 20px -6px rgba(0,0,0,0.4);
+    }
+    .modal-github-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 12px 28px -8px rgba(0,0,0,0.5); background: linear-gradient(135deg, #2d333b, #444c56); }
+    .modal-github-btn.is-private { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); color: var(--text-dim); cursor: not-allowed; box-shadow: none; }
+    .modal-github-btn.is-private:hover { transform: none; box-shadow: none; }
+    body.light-mode .modal-github-btn { background: #24292e; border-color: #24292e; }
+    body.light-mode .modal-github-btn.is-private { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); color: var(--text-dim); }
+
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; width: 100%; }
+    .contact-link-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-decoration: none; color: inherit; }
+    .contact-icon-box { width: 60px; height: 60px; border-radius: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ffffff; margin-bottom: 1rem; transition: var(--transition-bounce); }
+    .contact-link-card:hover .contact-icon-box { transform: scale(1.1) translateY(-4px); background: var(--accent-cyan); color: var(--bg-base); }
+    .contact-label { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .contact-value { font-size: 0.85rem; color: var(--text-secondary); }
+
+    .dock-container { 
+      /* Toujours centré horizontalement ; la largeur s'anime via le groupe interne */
+      position: fixed; bottom: 52px; left: 50%; transform: translateX(-50%); z-index: 1000; 
+      padding: 10px 14px; background: rgba(240, 242, 245, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 40px; box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.3); 
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dock-nav { display: flex; align-items: center; gap: 12px; }
+
+    /* Groupe de navigation repliable : caché sur l'accueil, déployé vers la gauche ailleurs */
+    .dock-nav-group {
+      display: flex; align-items: center; gap: 12px;
+      overflow-x: clip; overflow-y: visible;
+      /* Espace vertical : en haut pour les tooltips, en bas pour le scale au survol */
+      /* Espace horizontal : à gauche pour éviter le clipping du 1er bouton au scale */
+      padding: 62px 20px 10px; margin: -65px -25px -10px;
+      max-width: 716px; opacity: 1;
+      transition: max-width 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, margin-right 0.4s ease;
+    }
+    .dock-container.is-collapsed .dock-nav-group { max-width: 0; opacity: 0; margin-right: -12px; margin-left: 0px; padding-left: 0; padding-right: 0; }
+    .dock-container.is-collapsed .dock-nav { justify-content: center; }
+    .dock-btn { 
+      position: relative; width: 56px; height: 56px; border-radius: 20px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.9); 
+      color: #1a1d24; font-size: 1.35rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .dock-btn:hover, .dock-btn.is-active { color: #ffffff; background: #111111; border-color: #000000; transform: scale(1.15); z-index: 2; }
+    .dock-btn::after { 
+      content: attr(data-label); position: absolute; top: -55px; left: 50%; transform: translateX(-50%) scale(0.8); background: #111111; color: #ffffff; 
+      padding: 8px 18px; border-radius: 24px; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 600; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); white-space: nowrap; 
+    }
+    .dock-btn:hover::after { opacity: 1; transform: translateX(-50%) scale(1); }
+    .dock-separator { width: 2px; height: 32px; background: rgba(0, 0, 0, 0.1); border-radius: 2px; }
+    .lang-toggle-btn { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.05em; }
+
+    /* === PROGRESS DOTS === */
+    .progress-dots {
+      position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: row; gap: 8px; z-index: 1000; justify-content: center; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .progress-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.15); border: 1.5px solid rgba(255, 255, 255, 0.2); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: none !important; }
+    .progress-dot.is-active { background: var(--accent-cyan); border-color: var(--accent-cyan); transform: scale(1.4); box-shadow: 0 0 12px rgba(56, 189, 248, 0.5); }
+    .progress-dot:hover { background: rgba(255, 255, 255, 0.4); transform: scale(1.2); }
+    body.light-mode .progress-dot { background: rgba(0, 0, 0, 0.1); border-color: rgba(0, 0, 0, 0.2); }
+    body.light-mode .progress-dot.is-active { background: var(--accent-indigo); border-color: var(--accent-indigo); box-shadow: 0 0 12px rgba(129, 140, 248, 0.5); }
+
+    /* === STAGGERED ANIMATIONS === */
+    .stagger-item { opacity: 0; transform: translate3d(0, 30px, 0); transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    .slide-section.active-slide .stagger-item { opacity: 1; transform: translate3d(0, 0, 0); }
+    
+    /* === DOWNLOAD CV BUTTON === */
+    .btn-cv { display: inline-flex; align-items: center; gap: 10px; margin-top: 1.5rem; padding: 12px 24px; border-radius: 100px; font-size: 0.95rem; font-weight: 600; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo)); color: #ffffff; text-decoration: none; border: none; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 8px 25px -8px rgba(56, 189, 248, 0.4); }
+    .btn-cv:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 14px 35px -8px rgba(56, 189, 248, 0.5); }
+    .btn-cv:active { transform: translateY(0) scale(0.98); }
+
+    /* === ABOUT LANGUAGES & INTERESTS === */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+    .about-mini-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 1.5rem; }
+    .about-mini-card h4 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .about-mini-card h4 i { color: var(--accent-indigo); }
+    .about-mini-list { list-style: none; padding: 0; }
+    .about-mini-list li { font-size: 0.9rem; color: var(--text-secondary); padding: 4px 0; display: flex; align-items: center; gap: 8px; }
+    .about-mini-list li i { font-size: 0.85rem; color: var(--accent-cyan); width: 18px; text-align: center; }
+    .about-cert-link { color: var(--accent-cyan); font-weight: 700; text-decoration: none; border-bottom: 1px solid rgba(56, 189, 248, 0.3); transition: color 0.3s ease, border-color 0.3s ease; }
+    .about-cert-link i { font-size: 0.7rem; width: auto; }
+    .about-cert-link:hover { color: var(--accent-indigo); border-color: var(--accent-indigo); }
+
+    .particles-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+    .section-heading::after { content: ''; display: block; width: 60px; height: 3px; margin-top: 12px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-indigo)); border-radius: 2px; opacity: 0.6; }
+
+    @media (max-width: 1024px) {
+      .home-top-row { flex-direction: column; }
+      .home-side-actions { flex-direction: row; width: 100%; height: 120px; }
+    }
+
+    @media (max-width: 900px) {
+      .nav-arrow { display: none; }
+      .slide-section { padding-left: 5vw; padding-right: 5vw; }
+      .premium-card { padding: 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      * { cursor: auto !important; }
+      .cursor-pointer { display: none !important; }
+
+      /* Sur mobile : ne garder que les boutons thème clair/sombre et langue dans le dock */
+      .dock-nav-group { display: none !important; }
+
+      /* Sur mobile : masquer la barre temporelle verticale et ses marqueurs */
+      .timeline-container { padding-left: 1.5rem; }
+      .timeline-container::before { display: none; }
+      .timeline-marker { display: none; }
+      
+      .home-hero-panel { padding: 2rem; }
+      .hero-container { flex-direction: column; text-align: center; gap: 2rem; }
+      .badge-group { justify-content: center; }
+      
+      .home-expand-row { flex-wrap: wrap; height: auto; }
+      .home-expand-card { flex: 1 1 45%; height: 140px; }
+      .home-expand-card:hover { flex: 1 1 45%; transform: translateY(-4px); }
+    }
+    
+    @media (max-width: 480px) {
+      .home-side-actions { flex-direction: column; height: auto; }
+      .home-action-btn { padding: 1rem 0; height: 100px; }
+      .home-expand-card { flex: 1 1 100%; height: 120px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cursor-pointer" id="cursor-dot">
+    <svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="2,2 14,34 18,22 30,18" />
+    </svg>
+  </div>
+
+  <div class="bg-ambient">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="bg-grid"></div>
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    const NAME = "Alex FAHLOUNE";
+
+    const NAVIGATION_SCHEMA = [
+      { id: "home", icon: "fas fa-home", label: { fr: "Accueil", en: "Home" } },
+      { id: "about", icon: "fas fa-user-astronaut", label: { fr: "Profil", en: "Profile" } },
+      { id: "skills", icon: "fas fa-microchip", label: { fr: "Compétences", en: "Skills" } },
+      { id: "experience", icon: "fas fa-briefcase", label: { fr: "Expériences", en: "Experience" } },
+      { id: "education", icon: "fas fa-graduation-cap", label: { fr: "Formation", en: "Education" } },
+      { id: "projects", icon: "fas fa-folder-open", label: { fr: "Projets", en: "Projects" } },
+      { id: "contact", icon: "fas fa-paper-plane", label: { fr: "Contact", en: "Contact" } },
+    ];
+
+    const DATA_SOURCE = {
+      fr: {
+        role: "Ingénieur en Développement d'Application",
+        aboutText: "Ingénieur en développement d'applications, j'ai consolidé mon bagage technique et humain au fil de mes formations, de mes expériences professionnelles et de mes projets personnels. Aujourd'hui en quête de nouveaux défis, je m'envole pour la Nouvelle-Zélande en octobre à la recherche d'une mission de plusieurs mois, désireux d'allier découverte culturelle et apport de mes qualités à une équipe ambitieuse.",
+        statusText: "Disponible pour le travail",
+        workRightsText: "Working Holiday Visa · Droit de travailler",
+        locationText: "Normandie, France",
+        relocationText: "Auckland, Nouvelle-Zélande à partir d'Octobre",
+        ageText: "24 ans",
+        skillsData: {
+          "Architecture Back-end": { icon: "fas fa-server", pool: ["C#", "Java (Spring Boot, Java EE)", "Node.js", "Express.js", "Python", "API Rest", "WebSocket", "PHP", "C"] },
+          "Front-end & Mobile": { icon: "fas fa-laptop-code", pool: ["React", "JavaScript", "Tailwind", "HTML/CSS", "Bootstrap", "jQuery", "Android"] },
+          "Bases de Données": { icon: "fas fa-database", pool: ["SQL", "MySQL", "Oracle", "MongoDB", "NoSQL", "PL/SQL", "Architecture BDD", "Firebase"] },
+          "DevOps & Pratiques": { icon: "fas fa-layer-group", pool: ["Git", "Docker", "Kubernetes", "Linux", "Méthode Agile", "JUnit", "Maven", "Swagger", "UML", "MVC", "IA Générative", "Documentation technique", "Office 365"] },
+          "Savoir-être": { icon: "fas fa-layer-group", pool: ["Communication", "Esprit d'équipe", "Autonomie", "Adaptabilité", "Polyvalence"] }
+        },
+        experienceData: [
+          { role: "Apprenti Ingénieur Développeur FullStack", company: "RENAULT", locationText: "Cléon, France", date: "Sept. 2022 - Sept. 2026", desc: [
+            "Conception et développement d'applications internes destinées aux collaborateurs",
+            "Maintenance et optimisation d'applications critiques",
+            "Contribution à des projets d'envergure : analyse des besoins, conduite de projet, accompagnement client.",
+            "Support utilisateur",
+            "Formation continue : IA, outils collaboratifs..."
+          ]},
+          { role: "Stage Technicien & Suivi de Projet Industriel", company: "REVOZ", locationText: "Novo Mesto, Slovenie", date: "Avr. 2025 - Juil. 2025", desc: [
+            "Inventaire des équipements des lignes de production.",
+            "Organisation et animation de réunions de suivi d'affaire.",
+          ]},
+          { role: "Stage Développeur Web Fullstack", company: "RENAULT", locationText: "Cléon, France", date: "Jan. 2022 - Fév. 2022", desc: [
+            "Développement d'une application web interne de gestion des affaires.",
+          ]},
+          { role: "Stage Développeur Web Fullstack", company: "RENAULT", locationText: "Cléon, France", date: "Juin 2021 - Juil. 2021", desc: [
+            "Développement d'un portail d'accès aux applications métiers.",
+          ]}
+        ],
+        educationData: [
+          { degree: "Cycle ingénieur général en apprentissage (BAC +5)", detail: "Spécialisé en Ingénierie des Services du Numérique (ISN)", school: "ESIGELEC, Saint-Étienne-du-Rouvray", date: "2023 - 2026" },
+          { degree: "Licence informatique en apprentissage (BAC +3)", detail: "Spécialisé en développement d'application", school: "Lycée la Châtaigneraie, Le Mesnil-Esnard", date: "2022 - 2023" },
+          { degree: "BTS Informatique (BAC +2)", detail: "Spécialisé en développement d'application", school: "Lycée la Châtaigneraie, Le Mesnil-Esnard", date: "2020 - 2022" }
+        ],
+        projectsData: [
+          {
+            title: "History.job",
+            tags: ["Node.js", "Express.js", "React.js", "Tailwind CSS", "JavaScript", "API Rest", "NoSQL", "MongoDB", "Claude AI", "Extension Chrome", "API Groq"],
+            desc: "Application web centralisant l'ensemble de mes candidatures pour ma future recherche d'emploi, avec une extension Chrome utilisant l'IA pour analyser et enregistrer automatiquement les offres.",
+            fullDesc: "Pour structurer efficacement ma recherche d'emploi en Nouvelle-Zélande, j'ai conçu et développé une application web qui centralise l'ensemble de mes candidatures. Cet outil s'organise autour de « profils pays » et permet de gérer ses candidatures par statut (à postuler, postulé, entretien...), de suivre leur historique via une timeline interactive, et de stocker CV, lettres de motivation, des contacts et des notes. Le gros atout de l'environnement est l'intégration d'une extension Chrome connectée au backend, exploitant un modèle Llama 3 (via l'API Groq) pour analyser instantanément les pages d'offres d'emploi, en extraire les informations clés et automatiser leur enregistrement en base de données. Cela permet un gain de temps considérable, car je n'ai plus besoin de saisir à la main à chaque fois. Le front-end est déployé sur Netlify, le back-end sur Render, et les documents (CV et lettres de motivation) sont stockés sur Cloudinary. Je me suis également appuyé sur Claude pour coder une partie du projet et monter en compétences en React.",
+            features: [
+              "Organisation autour de « profils pays » pour structurer la recherche",
+              "Gestion des candidatures par statut (à postuler, postulé, entretien...)",
+              "Suivi de l'historique de chaque candidature via une timeline interactive",
+              "Stockage centralisé des CV, lettres de motivation, contacts et notes pour chaque candidature",
+              "Extension Chrome qui analyse et enregistre automatiquement les offres d'emploi grâce à l'IA",
+              "Utilisation de Claude pour coder une partie du projet et monter en compétences en React",
+            ],
+            images: [],
+            linkGithub: "https://github.com/alexFahl/history.job"
+          },
+          {
+            title: "Contrôle d'Assemblage des Câblages par IA Acoustique",
+            tags: ["PHP", "MySQL", "JavaScript", "Bootstrap", "Documentation technique", "WebSocket", "MySQL", "Architecture BDD"],
+            desc: "Développement Fullstack, en équipe de 6, de l'architecture logicielle d'un moyen de contrôle qualité industriel sur des connecteurs par IA acoustique.",
+            fullDesc: "Ce projet a été réalisé en équipe de 6 personnes dans le cadre de mon projet ingénieur de fin d'études. Le système développé est un prototype (Proof of Concept) fonctionnel, actuellement en phase de test et de co-développement chez le client industriel. La solution consiste à sécuriser le contrôle qualité de l'assemblage des câblages en bord de ligne. L'opérateur porte un bracelet connecté qui capte en direct les bruits d'encliquetage des connecteurs. Ces signaux sonores sont analysés en temps réel par une Intelligence Artificielle qui détermine la conformité du montage grâce à un modèle entraîné sur un dataset dédié. Mon rôle était principalement de piloter la partie informatique du projet, en conceptualisant la base de données relationnelle et en développant l'application web en fullstack. Tout d'abord, cette interface permet aux administrateurs de paramétrer les composants et d'orchestrer dynamiquement les séquences de montage. D'autre part, elle offre aux opérateurs un suivi visuel interactif en direct de leur cycle de travail. Interconnectée en temps réel avec le module IA, l'application intercepte instantanément les verdicts de conformité pour guider l'opérateur et verrouiller le flux de production en cas d'anomalie.",
+            features: [
+                "Architecture de la base de données relationnelle",
+                "Paramétrage des composants et des séquences de montage via l'application web",
+                "Système d'initialisation rapide par lecteur de code-barres (Zebra) pour l'appairage automatique du véhicule à monter",
+                "Workflow séquentiel en temps réel pour guider l'opérateur dans son cycle de travail",
+                "IHM de production responsive et ergonomique, optimisée pour l'utilisation des écrans tactiles industriels en bord de chaîne",
+                "Mode de supervision et d'administration critique incluant des fonctions avancées de dérogation",
+                "Interfaçage et communication en temps réel avec le back-end de l'IA acoustique via WebSocket",
+                "Documentation technique et fonctionnelle complète pour le client"
+            ],
+            images: [],
+            video: "cac/cac_1.mp4",
+            linkGithub: null
+          },
+          {
+            title: "Système de Traçabilité Industrielle",
+            tags: ["PHP", "MySQL", "Delphi", "Architecture BDD", "Suivi client", "Bootstrap", "JavaScript", "Documentation technique", "MySQL"],
+            desc: "Conception et développement d'un environnement applicatif pour la traçabilité photographique automatisée en sortie de ligne, traitant aujourd'hui ~25 véhicules/jour (contre ~15 auparavant).",
+            fullDesc: "Projet d'envergure mené dans le cadre de mon alternance chez Renault Group. Ce système permet la prise et l'archivage automatisés de photos de véhicules en sortie de production (aujourd'hui ~25 véhicules/jour, contre ~15 auparavant), afin de constituer une preuve visuelle de leur état avant livraison. L'environnement applicatif repose sur plusieurs briques logicielles coopérantes : une application de pilotage temps réel, un service de capture photographique multi-caméras, une base de données centrale et une application web de restitution et d'administration. Mon rôle principal a été de démarrer la conception en analysant le besoin fonctionnel pour conceptualiser la base de données complexe, qui a servi de fondation solide au développement de l'ensemble de l'environnement applicatif. J'ai ensuite réalisé l'application web de restitution et de paramétrage, contribué au développement de l'application de pilotage, et assuré des missions d'accompagnement client et de documentation.",
+            features: ["Conception de la base de données relationnelle complexe", "Développement de l'application web de restitution et de paramétrage", "Contribution au développement de l'application de pilotage", "Interventions sur site client pour maintenance et mises à jour", "Accompagnement client et rédaction de documentation technique"],
+            images: [],
+            linkGithub: null
+          },
+          {
+            title: "Gestion des heures des collaborateurs",
+            tags: ["MySQL", "Bootstrap", "Architecture BDD", "JavaScript", "PHP", "Documentation technique"],
+            desc: "Développement Fullstack d'une application déployée dans 5 services (~80 collaborateurs) pour faciliter la gestion des ressources humaines et l'analyse des coûts des affaires.",
+            fullDesc: "Déployée au sein de 5 services (~80 collaborateurs), cette application permet à chaque collaborateur de documenter un rapport hebdomadaire en y saisissant les heures passées par activité et par affaire. Elle intègre une structure en arborescence s'adaptant à plusieurs entités de l'entreprise et se connecte à la BDD d'une application tierce pour la récupération automatisée des affaires. L'objectif principal de l'application est d'offrir une visibilité totale sur la réalité financière de chaque affaire. En traduisant le temps de travail des collaborateurs en coûts réels, elle permet aux chargés d'affaires de valider la viabilité de leurs prévisions, d'ajuster leurs futures estimations avec une précision accrue et d'améliorer la rentabilité globale des affaires. ",
+            features: [ "Conception Fullstack d'une application web robuste et évolutive",
+                        "Architecture de base de données relationnelle complexe et flexible",
+                        "Optimisation de l'expérience utilisateur pour rendre l'application agréable à utiliser",
+                        "Connexion directe avec une application tierce pour la synchronisation des affaires",
+                        "Déploiement et maintenance au sein de plusieurs services",
+                        "Conception de tableaux de bord et d'interfaces de reporting (suivi des affaires, activités...) exportables en Excel",
+                        "Formation et support aux utilisateurs",
+                        "Rédaction de documentation technique et fonctionnelle"],
+            images: ["ghe/ghe_1.png", "ghe/ghe_3.png", "ghe/ghe_5.png", "ghe/ghe_6.png", "ghe/ghe_2.png"],
+            linkGithub: null
+          },
+          {
+            title: "FStats",
+            tags: [".NET MAUI", "C#", "XAML", "SQLite", "Cross-Platform", "Mobile"],
+            desc: "Application mobile multiplateforme de suivi de performances footballistiques personnelles, développée pour me former à .NET MAUI.",
+            fullDesc: "Projet personnel réalisé pour monter en compétences sur .NET MAUI, C# et le développement d'applications mobiles multiplateformes. FStats permet à un joueur de football d'enregistrer ses matchs et de suivre l'évolution de ses performances au fil du temps. L'application calcule automatiquement un ensemble de statistiques : nombre de victoires, nuls et défaites, total de buts et de passes décisives, moyennes par match, et taux d'implication dans les buts de l'équipe. Les données sont persistées localement sur l'appareil via une base SQLite.",
+            features: [
+              "Ajout de matchs avec date, heure, score et statistiques personnelles",
+              "Historique des matchs trié par date, avec code couleur selon le résultat (victoire, nul, défaite)",
+              "Tableau de bord de statistiques précises (buts, passes décisives, G/A, moyennes, taux d'implication)",
+              "Persistance locale des données via SQLite",
+              "Application multiplateforme (Android, iOS, macOS, Windows) à partir d'une base de code unique"
+            ],
+            images: ["fstats_/FStats_1.jpg", "fstats_/FStats_2.jpg", "fstats_/FStats_3.jpg"],
+            linkGithub: "https://github.com/alexFahl/FStats"
+        }
+        ],
+        contactData: {
+          subtitle: "Envie de collaborer ou d'échanger sur une opportunité ? Écrivez-moi !",
+          email: "alex.fahloune@gmail.com",
+          tel: "06 95 49 95 27"
+        }
+      },
+      en: {
+        role: "Application Development Engineer",
+        aboutText: "As an Application Development Engineer, I have consolidated my technical and interpersonal skills through my education, professional experiences, and personal projects. Currently seeking new challenges, I am flying to New Zealand in October for a multi-month assignment, eager to combine cultural discovery with bringing my qualities to an ambitious team.",
+        statusText: "Available for work",
+        workRightsText: "Working Holiday Visa · Full work rights",
+        locationText: "Normandy, France",
+        relocationText: "Auckland, New Zealand from October",
+        ageText: "24 y/o",
+        skillsData: {
+          "Back-end Architecture": { icon: "fas fa-server", pool: ["C#", "Java (Spring Boot, Java EE)", "Node.js", "Express.js", "Python", "REST API", "WebSocket", "PHP", "C"] },
+          "Front-end & Mobile": { icon: "fas fa-laptop-code", pool: ["React", "JavaScript", "Tailwind", "HTML/CSS", "Bootstrap", "jQuery", "Android"] },
+          "Database Engines": { icon: "fas fa-database", pool: ["SQL", "MySQL", "Oracle", "MongoDB", "NoSQL", "PL/SQL", "DB Architecture", "Firebase"] },
+          "DevOps & Practices": { icon: "fas fa-layer-group", pool: ["Git", "Docker", "Kubernetes", "Linux", "Agile Methods", "JUnit", "Maven", "Swagger", "UML", "MVC", "Generative AI", "Documentation technique", "Office 365"] },
+          "Soft Skills": { icon: "fas fa-layer-group", pool: ["Communication", "Teamwork", "Autonomy", "Adaptability", "Quick learner"] }
+        },
+        experienceData: [
+          { role: "Apprentice FullStack Application Developer", company: "RENAULT", locationText: "Cléon, France", date: "Sep. 2022 - Sep. 2026", desc: [
+            "Design and development of internal applications for employees",
+            "Maintenance and optimization of critical applications",
+            "Contribution to large-scale projects: requirements analysis, project management, client support",
+            "User support",
+            "Continuous training: AI, collaborative tools..."
+          ]},
+          { role: "Industrial Project Monitoring Intern", company: "REVOZ", locationText: "Novo Mesto, Slovenia", date: "Apr. 2025 - Jul. 2025", desc: [
+            "Inventory of production line equipment",
+            "Organization and facilitation of project monitoring meetings"
+          ]},
+          { role: "Fullstack Web Developer Intern", company: "RENAULT", locationText: "Cléon, France", date: "Jan. 2022 - Feb. 2022", desc: [
+            "Development of an internal web application for business management"
+          ]},
+          { role: "Fullstack Web Developer Intern", company: "RENAULT", locationText: "Cléon, France", date: "Jun. 2021 - Jul. 2021", desc: [
+            "Development of an access portal for business applications"
+          ]}
+        ],
+        educationData: [
+          { degree: "Engineering Degree Apprenticeship (Master's level)", detail: "Major in Digital Services Engineering (ISN)", school: "ESIGELEC, Saint-Étienne-du-Rouvray", date: "2023 - 2026" },
+          { degree: "Bachelor's in Computer Science Apprenticeship", detail: "Specialized in Application Development", school: "Lycée la Châtaigneraie, Le Mesnil-Esnard", date: "2022 - 2023" },
+          { degree: "Higher National Diploma in IT (BTS)", detail: "Specialized in Application Development", school: "Lycée la Châtaigneraie, Le Mesnil-Esnard", date: "2020 - 2022" }
+        ],
+        projectsData: [
+          {
+            title: "History.job",
+            tags: ["Node.js", "Express.js", "React.js", "Tailwind CSS", "JavaScript", "REST API", "NoSQL", "MongoDB", "Claude AI", "Chrome Extension", "Groq API"],
+            desc: "A web app that keeps all my job applications in one place for my future job search , with a Chrome extension that uses AI to read and save job offers automatically.",
+            fullDesc: "To organize my job search in New Zealand, I designed and built a web app that keeps all my job applications in one place. The tool is built around 'country profiles' and lets me manage applications by status (to apply, applied, interview...), follow their history with an interactive timeline, and store CVs, cover letters, contacts, and notes. The best part of the tool is a Chrome extension connected to the backend. It uses a Llama 3 model (through the Groq API) to read job offer pages right away, pull out the key information, and save it to the database automatically. This saves a lot of time because I no longer need to type everything by hand each time. The front-end is hosted on Netlify, the back-end on Render, and the documents (CVs and cover letters) are stored on Cloudinary. I also used Claude to code part of the project and to improve my React skills.",
+            features: [
+              "Built around 'country profiles' to organize the search",
+              "Manage applications by status (to apply, applied, interview...)",
+              "Follow each application's history with an interactive timeline",
+              "Store CVs, cover letters, contacts, and notes for each application",
+              "Chrome extension that reads and saves job offers automatically using AI",
+              "Used Claude to code part of the project and improve my React skills",
+            ],
+            images: [],
+            linkGithub: "https://github.com/alexFahl/history.job"
+          },
+          {
+            title: "Wiring Assembly Control with Acoustic AI",
+            tags: ["PHP", "MySQL", "JavaScript", "Bootstrap", "Documentation technique", "WebSocket", "MySQL", "DB Architecture"],
+            desc: "Fullstack development, in a team of 6, of the software architecture of an industrial quality control system for connectors using acoustic AI.",
+            fullDesc: "This project was carried out in a team of 6 people as part of my final-year engineering project. The developed system is a working prototype (Proof of Concept), currently in the testing and co-development phase at the industrial client. The solution aims to secure the quality control of wiring assembly at the edge of the line. The operator wears a connected wristband that captures the clipping sounds of the connectors in real time. These sound signals are analyzed in real time by an Artificial Intelligence that determines the conformity of the assembly thanks to a model trained on a dedicated dataset. My role was mainly to lead the software part of the project, by designing the relational database and developing the web application in fullstack. First, this interface allows administrators to configure the components and dynamically orchestrate the assembly sequences. Second, it offers operators an interactive, live visual tracking of their work cycle. Interconnected in real time with the AI module, the application instantly intercepts the conformity verdicts to guide the operator and lock the production flow in case of an anomaly.",
+            features: [
+                "Relational database architecture",
+                "Configuration of components and assembly sequences via the web application",
+                "Quick initialization system using a barcode scanner (Zebra) for automatic pairing of the vehicle to assemble",
+                "Real-time sequential workflow to guide the operator through their work cycle",
+                "Responsive and ergonomic production HMI, optimized for industrial touchscreens at the edge of the line",
+                "Critical supervision and administration mode including advanced override functions",
+                "Real-time interfacing and communication with the acoustic AI back-end via WebSocket",
+                "Complete technical and functional documentation for the client"
+            ],
+            images: [],
+            video: "cac/cac_1.mp4",
+            linkGithub: null
+          },
+          {
+            title: "Industrial Traceability System",
+            tags: ["PHP", "MySQL", "Delphi", "DB Architecture", "Customer Support", "Bootstrap", "JavaScript", "Documentation technique", "MySQL"],
+            desc: "Design and development of an application environment for automated photographic traceability at the end of the production line, now processing ~25 vehicles/day (up from ~15).",
+            fullDesc: "A large-scale project carried out during my apprenticeship at Renault Group. This system enables automated capture and archiving of vehicle photos at the end of the production line (now ~25 vehicles/day, up from ~15), in order to provide visual proof of their condition before delivery. The application environment is built on several cooperating software components: a real-time control application, a multi-camera photo capture service, a central database, and a web application for consultation and administration. My main role was to start the design by analyzing the functional needs to conceptualize the complex database, which served as a solid foundation for the development of the entire application environment. I then built the web application for consultation and configuration, contributed to the control application, and handled client support and documentation tasks.",
+            features: ["Design of the complex relational database", "Development of the web application for consultation and configuration", "Contribution to the development of the control application", "On-site interventions at client facility for maintenance and updates", "Client support and technical documentation writing"],
+            images: [],
+            linkGithub: null
+          },
+          {
+            title: "Employee Hours Management",
+            tags: ["MySQL", "Bootstrap", "DB Architecture", "JavaScript", "PHP", "Documentation technique"],
+            desc: "Fullstack development of an application deployed across 5 teams (~80 people) to simplify human resources management and analyze project costs.",
+            fullDesc: "Deployed across 5 teams (~80 people), this application allows each employee to fill in a weekly report by entering the hours spent per activity and per project. It includes a tree structure that adapts to several company entities and connects to the database of a third-party application to automatically retrieve projects. The main goal of the application is to offer full visibility on the financial reality of each project. By turning employees' working time into real costs, it allows project managers to validate the viability of their forecasts, adjust their future estimates with greater accuracy, and improve the overall profitability of projects.",
+            features: [ "Fullstack design of a robust and scalable web application",
+                        "Complex and flexible relational database architecture",
+                        "User experience optimization to make the application pleasant to use",
+                        "Direct connection with a third-party application to synchronize projects",
+                        "Deployment and maintenance across several departments",
+                        "Design of dashboards and reporting interfaces (project tracking, activities...) exportable to Excel",
+                        "User training and support",
+                        "Technical and functional documentation writing"],
+            images: ["ghe/ghe_1.png", "ghe/ghe_3.png", "ghe/ghe_5.png", "ghe/ghe_6.png", "ghe/ghe_2.png"],
+            linkGithub: null
+          },
+          {
+            title: "FStats",
+            tags: [".NET MAUI", "C#", "XAML", "SQLite", "Cross-Platform", "Mobile"],
+            desc: "A cross-platform mobile app for tracking personal football performance, built to learn .NET MAUI.",
+            fullDesc: "A personal project carried out to improve my skills in .NET MAUI, C# and cross-platform mobile development. FStats lets a football player record their matches and track their performance over time. The app automatically computes a set of statistics: number of wins, draws and losses, total goals and assists, per-match averages, and involvement rate in the team's goals. Data is stored locally on the device using a SQLite database.",
+            features: [
+              "Add matches with date, time, score and personal statistics",
+              "Match history sorted by date, with color coding based on the result (win, draw, loss)",
+              "Dashboard of detailed statistics (goals, assists, G/A, averages, involvement rate)",
+              "Local data persistence using SQLite",
+              "Cross-platform application (Android, iOS, macOS, Windows) from a single codebase"
+            ],
+            images: ["fstats_/FStats_1.jpg", "fstats_/FStats_2.jpg", "fstats_/FStats_3.jpg"],
+            linkGithub: "https://github.com/alexFahl/FStats"
+          },
+        ],
+        contactData: {
+          subtitle: "Want to collaborate or discuss an opportunity? Drop me a message!",
+          email: "alex.fahloune@gmail.com"
+        }
+      }
+    };
+
+    const getSkillIcon = (skillName) => {
+      const mapping = {
+        "Java (Spring Boot, Java EE)": "devicon-java-plain",
+        "Node.js": "devicon-nodejs-plain",
+        "PHP": "devicon-php-plain",
+        "C": "devicon-c-plain",
+        "C#": "devicon-csharp-plain",
+        "JavaScript": "devicon-javascript-plain",
+        "HTML/CSS": "devicon-html5-plain",
+        "Bootstrap": "devicon-bootstrap-plain",
+        "jQuery": "devicon-jquery-plain",
+        "Android": "devicon-android-plain",
+        "SQL": "fas fa-database",
+        "PL/SQL": "fas fa-database",
+        "NoSQL": "fas fa-database",
+        "MySQL": "devicon-mysql-plain",
+        "MongoDB": "devicon-mongodb-plain",
+        "Oracle": "devicon-oracle-original",
+        "Docker": "devicon-docker-plain",
+        "Kubernetes": "devicon-kubernetes-plain",
+        "Linux": "devicon-linux-plain",
+        "Maven": "devicon-maven-plain",
+        "Git": "devicon-git-plain",
+        "Swagger": "fas fa-file-code",
+        "JUnit": "fas fa-vial",
+        "Méthode Agile": "fas fa-sync-alt",
+        "Agile Methods": "fas fa-sync-alt",
+        "UML": "fas fa-project-diagram",
+        "IA Générative": "fas fa-robot",
+        "Generative AI": "fas fa-robot",
+        "Python": "devicon-python-plain",
+        "Express.js": "devicon-express-original",
+        "API Rest": "fas fa-plug",
+        "REST API": "fas fa-plug",
+        "WebSocket": "fas fa-tower-broadcast",
+        "Tailwind": "devicon-tailwindcss-plain",
+        "React": "devicon-react-original",
+        "Firebase": "devicon-firebase-plain",
+        "Architecture BDD": "fas fa-sitemap",
+        "DB Architecture": "fas fa-sitemap",
+        "MVC": "fas fa-diagram-project",
+        "Documentation technique": "fas fa-book",
+        "Office 365": "fab fa-microsoft",
+        "Esprit d'équipe": "fas fa-users",
+        "Teamwork": "fas fa-users",
+        "Communication": "fas fa-comments",
+        "Adaptabilité": "fas fa-arrows-rotate",
+        "Adaptability": "fas fa-arrows-rotate",
+        "Polyvalence": "fas fa-shapes",
+        "Versatility": "fas fa-shapes",
+        "Autonomie": "fas fa-compass",
+        "Autonomy": "fas fa-compass"
+      };
+      return mapping[skillName] || "fas fa-check-circle"; 
+    };
+
+    /* Tag icon mapping for project tags (slightly different keys) */
+    const getTagIcon = (tag) => {
+      const mapping = {
+        "React": "devicon-react-original",
+        "Node.js": "devicon-nodejs-plain",
+        "MongoDB": "devicon-mongodb-plain",
+        "Docker": "devicon-docker-plain",
+        "PHP": "devicon-php-plain",
+        "MySQL": "devicon-mysql-plain",
+        "Delphi": "fas fa-code",
+        "Suivi client": "fas fa-headset",
+        "Client Support": "fas fa-headset",
+        "Java Spring Boot": "devicon-spring-plain",
+        "Bootstrap": "devicon-bootstrap-plain",
+        "Android": "devicon-android-plain",
+        "Java": "devicon-java-plain",
+        "NoSQL": "fas fa-database",
+        "JavaScript": "devicon-javascript-plain",
+        "HTML/CSS": "devicon-html5-plain",
+        "Git": "devicon-git-plain",
+        "Docker": "devicon-docker-plain",
+        "Kubernetes": "devicon-kubernetes-plain",
+        "Linux": "devicon-linux-plain",
+        "Python": "devicon-python-plain",
+        "TypeScript": "devicon-typescript-plain",
+        "Vue.js": "devicon-vuejs-plain",
+        "Angular": "devicon-angularjs-plain",
+        "PostgreSQL": "devicon-postgresql-plain",
+        "Redis": "devicon-redis-plain",
+        "AWS": "devicon-amazonwebservices-plain",
+        "Figma": "devicon-figma-plain",
+        "Express.js": "devicon-express-original",
+        "React.js": "devicon-react-original",
+        "Tailwind CSS": "devicon-tailwindcss-plain",
+        "Claude AI": "fas fa-robot",
+        "Extension Chrome": "fab fa-chrome",
+        "Chrome Extension": "fab fa-chrome",
+        "API Groq": "fas fa-bolt",
+        "Groq API": "fas fa-bolt",
+        "Architecture BDD": "fas fa-sitemap",
+        "DB Architecture": "fas fa-sitemap",
+        "Documentation technique": "fas fa-book",
+        "WebSocket": "fas fa-plug",
+        "API Rest": "fas fa-plug",
+        "REST API": "fas fa-plug",
+        "Customer Support": "fas fa-headset",
+        ".NET MAUI": "devicon-dotnetcore-plain",
+        "C#": "devicon-csharp-plain",
+        "XAML": "fas fa-code",
+        "SQLite": "devicon-sqlite-plain",
+        "Cross-Platform": "fas fa-layer-group",
+        "Mobile": "fas fa-mobile-screen",
+      };
+      return mapping[tag] || "fas fa-tag";
+    };
+
+    /* ====================================================== */
+    /* === PROJECT MODAL COMPONENT === */
+    /* ====================================================== */
+    function ProjectModal({ project, onClose, isLightMode, lang }) {
+      const [slideIndex, setSlideIndex] = React.useState(0);
+
+      React.useEffect(() => {
+        if (!project) return;
+        const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
+      }, [project, onClose]);
+
+      React.useEffect(() => { setSlideIndex(0); }, [project]);
+
+      const images = project ? (project.images || []) : [];
+      const hasImages = images.length > 0;
+      const video = project ? project.video : null;
+      const goTo = (idx) => setSlideIndex((idx + images.length) % images.length);
+      const isFr = lang === 'fr';
+
+      return (
+        <div className={`project-modal-overlay ${project ? 'is-open' : ''}`} onClick={onClose}>
+          <div className="project-modal" onClick={(e) => e.stopPropagation()}>
+
+            {/* Carousel */}
+            <div className="modal-carousel">
+              {hasImages ? (
+                <>
+                  <div className="modal-carousel-track" style={{ transform: `translateX(-${slideIndex * 100}%)` }}>
+                    {images.map((src, i) => (
+                      <img key={i} src={src} alt={`screenshot ${i + 1}`} className="modal-carousel-slide" />
+                    ))}
+                  </div>
+                  {images.length > 1 && (
+                    <>
+                      <button className="modal-carousel-btn prev" onClick={() => goTo(slideIndex - 1)} aria-label="Précédent">
+                        <i className="fas fa-chevron-left"></i>
+                      </button>
+                      <button className="modal-carousel-btn next" onClick={() => goTo(slideIndex + 1)} aria-label="Suivant">
+                        <i className="fas fa-chevron-right"></i>
+                      </button>
+                      <div className="modal-carousel-dots">
+                        {images.map((_, i) => (
+                          <div key={i} className={`modal-carousel-dot ${i === slideIndex ? 'active' : ''}`} onClick={() => goTo(i)} />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              ) : video ? (
+                <video src={video} className="modal-carousel-video" controls playsInline preload="metadata" />
+              ) : (
+                <div className="modal-carousel-placeholder">
+                  <i className="fas fa-lock"></i>
+                  <span>{isFr ? 'Photos confidentielles' : 'Confidential photos'}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Body */}
+            <div className="modal-body">
+              <div className="modal-header">
+                <h2 className="modal-title">{project?.title}</h2>
+                <button className="modal-close" onClick={onClose} aria-label="Fermer">
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+
+              {/* Description */}
+              <p className="modal-desc">{project?.fullDesc || project?.desc}</p>
+
+              {/* Actions clés */}
+              {(project?.features || []).length > 0 && (
+                <div>
+                  <h4 className="modal-section-title">
+                    <i className="fas fa-list-check"></i>
+                    {isFr ? 'Actions clés' : 'Key actions'}
+                  </h4>
+                  <ul className="modal-features-list">
+                    {(project?.features || []).map((f, i) => (
+                      <li key={i}><i className="fas fa-chevron-right"></i>{f}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Compétences */}
+              {(project?.tags || []).length > 0 && (
+                <div>
+                  <h4 className="modal-section-title">
+                    <i className="fas fa-microchip"></i>
+                    {isFr ? 'Compétences' : 'Skills'}
+                  </h4>
+                  <div className="modal-tags">
+                    {(project?.tags || []).map((tag) => (
+                      <span className="project-tag" key={tag}>
+                        <i className={getTagIcon(tag)}></i> {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Bouton GitHub */}
+              <div className="modal-actions">
+                <a
+                  href={project?.linkGithub || '#'}
+                  className={`modal-github-btn${!project?.linkGithub ? ' is-private' : ''}`}
+                  target={project?.linkGithub ? '_blank' : '_self'}
+                  rel="noopener noreferrer"
+                  onClick={!project?.linkGithub ? (e) => e.preventDefault() : undefined}
+                >
+                  <i className="fab fa-github"></i>
+                  {!project?.linkGithub
+                    ? (isFr ? 'Code source privé' : 'Private source code')
+                    : (isFr ? 'Voir le code source' : 'View source code')}
+                  {!project?.linkGithub && <i className="fas fa-lock" style={{ fontSize: '0.8rem', opacity: 0.6 }}></i>}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const EXTRA_DATA = {
+      fr: {
+        languages: [
+          { name: "Français", level: "Natif", icon: "fas fa-flag" },
+          { name: "Anglais", level: "Avancé (B2)", icon: "fas fa-globe", cert: "TOEIC : 860/990", certUrl: "https://www.etsglobal.org/fr/en/digital-score-report/3F7A94D36DD0B52FB16770AC159CCAE78A22BA1A044FEFD3E648A6EC205CA1D6Szc5c28wWStSTE5QYnljTmV6dTEvWW12VElQWjkzdC9nK1Q1ODBSeEpDbHZwbGps" },
+        ],
+        interests: [
+          { name: "Voyages & Découverte", icon: "fas fa-plane" },
+          { name: "Sport", icon: "fas fa-dumbbell" },
+          { name: "Montages vidéos & photos", icon: "fas fa-microchip" },
+        ],
+        cvLabel: "Télécharger mon CV"
+      },
+      en: {
+        languages: [
+          { name: "French", level: "Native", icon: "fas fa-flag" },
+          { name: "English", level: "Advanced (B2)", icon: "fas fa-globe", cert: "TOEIC : 860/990", certUrl: "https://www.etsglobal.org/fr/en/digital-score-report/3F7A94D36DD0B52FB16770AC159CCAE78A22BA1A044FEFD3E648A6EC205CA1D6Szc5c28wWStSTE5QYnljTmV6dTEvWW12VElQWjkzdC9nK1Q1ODBSeEpDbHZwbGps" }
+        ],
+        interests: [
+          { name: "Travel & Discovery", icon: "fas fa-plane" },
+          { name: "Sports", icon: "fas fa-dumbbell" },
+          { name: "Video & Photo Editing", icon: "fas fa-microchip" },
+        ],
+        cvLabel: "Download my CV"
+      }
+    };
+
+    function ParticlesBackground() {
+      const canvasRef = useRef(null);
+      
+      useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        let animId;
+        
+        const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+        resize();
+        window.addEventListener('resize', resize);
+        
+        const particles = Array.from({ length: 50 }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          size: Math.random() * 2 + 0.5,
+          opacity: Math.random() * 0.4 + 0.1
+        }));
+        
+        const animate = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = canvas.width;
+            if (p.x > canvas.width) p.x = 0;
+            if (p.y < 0) p.y = canvas.height;
+            if (p.y > canvas.height) p.y = 0;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(56, 189, 248, ${p.opacity})`;
+            ctx.fill();
+          });
+          
+          for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+              const dx = particles[i].x - particles[j].x;
+              const dy = particles[i].y - particles[j].y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 120) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(56, 189, 248, ${0.08 * (1 - dist / 120)})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+              }
+            }
+          }
+          animId = requestAnimationFrame(animate);
+        };
+        animate();
+        
+        return () => { cancelAnimationFrame(animId); window.removeEventListener('resize', resize); };
+      }, []);
+      
+      return <canvas ref={canvasRef} className="particles-canvas" />;
+    }
+
+    function App() {
+      const [lang, setLang] = useState("en");
+      const [isLightMode, setIsLightMode] = useState(false);
+      const [currentSlide, setCurrentSlide] = useState("home");
+      const [selectedProject, setSelectedProject] = useState(null);
+      const wrapperRef = useRef(null);
+      const slideRefs = useRef({});
+
+      const currentIndex = NAVIGATION_SCHEMA.findIndex(n => n.id === currentSlide);
+      const extra = EXTRA_DATA[lang];
+
+      useEffect(() => {
+        const dot = document.getElementById('cursor-dot');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let animationFrameId;
+
+        const onMouseMove = (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        };
+
+        window.addEventListener('mousemove', onMouseMove);
+
+        const animate = () => {
+          if (dot) dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+          animationFrameId = requestAnimationFrame(animate);
+        };
+        animate();
+
+        return () => {
+          window.removeEventListener('mousemove', onMouseMove);
+          cancelAnimationFrame(animationFrameId);
+        };
+      }, []);
+
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            const nextIndex = currentIndex === NAVIGATION_SCHEMA.length - 1 ? 0 : currentIndex + 1;
+            navigateToSlide(NAVIGATION_SCHEMA[nextIndex].id);
+          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            const prevIndex = currentIndex === 0 ? NAVIGATION_SCHEMA.length - 1 : currentIndex - 1;
+            navigateToSlide(NAVIGATION_SCHEMA[prevIndex].id);
+          }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+      }, [currentIndex]);
+
+      useEffect(() => {
+        if (isLightMode) {
+          document.body.classList.add('light-mode');
+        } else {
+          document.body.classList.remove('light-mode');
+        }
+      }, [isLightMode]);
+
+      useEffect(() => {
+        const observerOptions = { root: wrapperRef.current, threshold: 0.6 };
+        const slideObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setCurrentSlide(entry.target.id);
+              entry.target.classList.add("active-slide");
+            }
+          });
+        }, observerOptions);
+
+        Object.values(slideRefs.current).forEach((ref) => {
+          if (ref) slideObserver.observe(ref);
+        });
+
+        return () => slideObserver.disconnect();
+      }, []);
+
+      const navigateToSlide = (id) => {
+        const element = slideRefs.current[id];
+        if (element && wrapperRef.current) {
+          element.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+        }
+      };
+
+      const handlePrev = () => {
+        const prevIndex = currentIndex === 0 ? NAVIGATION_SCHEMA.length - 1 : currentIndex - 1;
+        navigateToSlide(NAVIGATION_SCHEMA[prevIndex].id);
+      };
+
+      const handleNext = () => {
+        const nextIndex = currentIndex === NAVIGATION_SCHEMA.length - 1 ? 0 : currentIndex + 1;
+        navigateToSlide(NAVIGATION_SCHEMA[nextIndex].id);
+      };
+
+      const t = DATA_SOURCE[lang];
+
+      return (
+        <>
+          <ParticlesBackground />
+
+          <button className="nav-arrow nav-arrow-left" onClick={handlePrev} aria-label="Section précédente">
+            <i className="fas fa-chevron-left"></i>
+          </button>
+          
+          <button className="nav-arrow nav-arrow-right" onClick={handleNext} aria-label="Section suivante">
+            <i className="fas fa-chevron-right"></i>
+          </button>
+
+          <div className="carousel-wrapper" ref={wrapperRef}>
+            
+            <section id="home" className="slide-section" ref={(el) => (slideRefs.current["home"] = el)}>
+              <div className="slide-content home-wrapper">
+                
+                <div className="home-dashboard">
+                  
+                  {/* --- LIGNE DU HAUT --- */}
+                  <div className="home-top-row">
+                    
+                    {/* Hero Card Principale */}
+                    <div className="home-hero-panel premium-card stagger-item" style={{ transitionDelay: '0.1s' }}>
+                      <div className="hero-container">
+                        <div className="hero-avatar-wrapper">
+                          <img src="img/pdp.jpg" alt={NAME} className="hero-avatar" onError={(e) => { e.target.src = "img/pdp.png"; }} />
+                        </div>
+                        <div>
+                          <p className="hero-greet">{lang === "fr" ? "Bienvenue" : "Welcome"}</p>
+                          <h1 className="hero-name">{NAME}</h1>
+                          <p className="hero-role">{t.role}</p>
+                          
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <div className="badge-group">
+                                {/* <span className="premium-badge"><i className="fas fa-birthday-cake"></i> {t.ageText}</span> */}
+                                <span className="premium-badge"><i className="fas fa-location-dot"></i> {t.locationText}</span>
+                            </div>
+                            
+                            <div className="badge-group">
+                                <span className="premium-badge status-available">
+                                    <span className="pulse-dot"></span> {t.statusText}
+                                </span>  
+                                <span className="premium-badge"><i className="fas fa-passport"></i> {t.workRightsText}</span>
+                                <span className="premium-badge"><i className="fas fa-plane-departure"></i> {t.relocationText}</span>                        
+                            </div>
+                          </div>
+
+                          <a href="docs/FAHLOUNE_resume.pdf" className="btn-cv" target="_blank" rel="noopener noreferrer">
+                            <i className="fas fa-download"></i> {extra.cvLabel}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Boutons Profil & Contact */}
+                    <div className="home-side-actions">
+                      <button className="home-action-btn stagger-item" style={{ transitionDelay: '0.2s' }} onClick={() => navigateToSlide("about")}>
+                        <i className="fas fa-user-astronaut"></i>
+                        <span>{NAVIGATION_SCHEMA.find(n => n.id === "about").label[lang]}</span>
+                      </button>
+                      <button className="home-action-btn stagger-item" style={{ transitionDelay: '0.3s' }} onClick={() => navigateToSlide("contact")}>
+                        <i className="fas fa-paper-plane"></i>
+                        <span>{NAVIGATION_SCHEMA.find(n => n.id === "contact").label[lang]}</span>
+                      </button>
+                    </div>
+
+                  </div>
+
+                  {/* --- LIGNE DU BAS : BAndeau fixe --- */}
+                  <div className="home-expand-row">
+                    
+                    <button className="home-expand-card stagger-item" style={{ transitionDelay: '0.4s' }} onClick={() => navigateToSlide("skills")}>
+                      <div className="expand-content-wrapper">
+                        <i className="fas fa-microchip expand-icon"></i>
+                        <span className="expand-title">{NAVIGATION_SCHEMA.find(n => n.id === "skills").label[lang]}</span>
+                      </div>
+                    </button>
+                    
+                    <button className="home-expand-card stagger-item" style={{ transitionDelay: '0.5s' }} onClick={() => navigateToSlide("experience")}>
+                      <div className="expand-content-wrapper">
+                        <i className="fas fa-briefcase expand-icon"></i>
+                        <span className="expand-title">{NAVIGATION_SCHEMA.find(n => n.id === "experience").label[lang]}</span>
+                      </div>
+                    </button>
+                    
+                    <button className="home-expand-card stagger-item" style={{ transitionDelay: '0.6s' }} onClick={() => navigateToSlide("education")}>
+                      <div className="expand-content-wrapper">
+                        <i className="fas fa-graduation-cap expand-icon"></i>
+                        <span className="expand-title">{NAVIGATION_SCHEMA.find(n => n.id === "education").label[lang]}</span>
+                      </div>
+                    </button>
+
+                    <button className="home-expand-card stagger-item" style={{ transitionDelay: '0.7s' }} onClick={() => navigateToSlide("projects")}>
+                      <div className="expand-content-wrapper">
+                        <i className="fas fa-folder-open expand-icon"></i>
+                        <span className="expand-title">{NAVIGATION_SCHEMA.find(n => n.id === "projects").label[lang]}</span>
+                      </div>
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </section>
+
+            <section id="about" className="slide-section" ref={(el) => (slideRefs.current["about"] = el)}>
+              <div className="slide-content">
+                <h2 className="section-heading"><i className="fas fa-user-astronaut"></i> {NAVIGATION_SCHEMA.find(n => n.id === "about").label[lang]}</h2>
+                <div className="premium-card stagger-item" style={{ fontSize: "1.15rem", lineHeight: "1.9", color: "var(--text-primary)" }}>
+                  <p>{t.aboutText}</p>
+                  
+                  <div className="about-grid">
+                    <div className="about-mini-card">
+                      <h4><i className="fas fa-language"></i> {lang === "fr" ? "Langues" : "Languages"}</h4>
+                      <ul className="about-mini-list">
+                        {extra.languages.map((l, i) => (
+                          <li key={i}><i className={l.icon}></i> <strong>{l.name}</strong> — {l.level}{l.cert && (<> · <a className="about-cert-link" href={l.certUrl} target="_blank" rel="noopener noreferrer">{l.cert} <i className="fas fa-arrow-up-right-from-square"></i></a></>)}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="about-mini-card">
+                      <h4><i className="fas fa-heart"></i> {lang === "fr" ? "Centres d'intérêt" : "Interests"}</h4>
+                      <ul className="about-mini-list">
+                        {extra.interests.map((interest, i) => (
+                          <li key={i}><i className={interest.icon}></i> {interest.name}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section id="skills" className="slide-section" ref={(el) => (slideRefs.current["skills"] = el)}>
+              <div className="slide-content">
+                <h2 className="section-heading"><i className="fas fa-microchip"></i> {NAVIGATION_SCHEMA.find(n => n.id === "skills").label[lang]}</h2>
+                <div className="premium-grid">
+                  {Object.entries(t.skillsData).map(([key, data], idx) => (
+                    <div className="premium-card skill-category-card stagger-item" key={key}>
+                      <h3 className="skill-category-title">
+                        <i className={data.icon}></i> {key}
+                      </h3>
+                      <div className="skill-pool">
+                        {data.pool.map((skill) => (
+                          <span className="skill-tag" key={skill}>
+                            <i className={getSkillIcon(skill)}></i> {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section id="experience" className="slide-section" ref={(el) => (slideRefs.current["experience"] = el)}>
+              <div className="slide-content">
+                <h2 className="section-heading"><i className="fas fa-briefcase"></i> {NAVIGATION_SCHEMA.find(n => n.id === "experience").label[lang]}</h2>
+                <div className="premium-card timeline-container stagger-item">
+                  {t.experienceData.map((exp, idx) => (
+                    <div className="timeline-node" key={idx}>
+                      <div className="timeline-marker"></div>
+                      <div className="timeline-meta">
+                        <h3 className="timeline-role">{exp.role}</h3>
+                        <span className="timeline-date">{exp.date}</span>
+                      </div>
+                      
+                      <div className="timeline-company" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <i className="far fa-building"></i> {exp.company}
+                        </span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-dim)', fontSize: '0.9rem' }}>
+                          <i className="fas fa-location-dot"></i> {exp.locationText}
+                        </span>
+                      </div>
+
+                      <ul className="timeline-list">
+                        {exp.desc.map((item, i) => (
+                          <li key={i}><i className="fas fa-chevron-right"></i>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section id="education" className="slide-section" ref={(el) => (slideRefs.current["education"] = el)}>
+              <div className="slide-content">
+                <h2 className="section-heading"><i className="fas fa-graduation-cap"></i> {NAVIGATION_SCHEMA.find(n => n.id === "education").label[lang]}</h2>
+                <div className="premium-grid">
+                  {t.educationData.map((edu, idx) => (
+                    <div className="premium-card stagger-item" key={idx} style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                      <div>
+                        <span className="timeline-date" style={{ display: "inline-block", marginBottom: "1rem" }}>{edu.date}</span>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.5rem', color: isLightMode ? '#0f172a' : '#fff' }}>{edu.degree}</h3>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '0.25rem' }}>{edu.detail}</p>
+                      </div>
+                      <p style={{ color: 'var(--accent-cyan)', fontSize: '0.9rem', fontWeight: '600', marginTop: '1rem' }}>
+                        <i className="fas fa-school" style={{ marginRight: '8px' }}></i>{edu.school}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section id="projects" className="slide-section" ref={(el) => (slideRefs.current["projects"] = el)}>
+              <div className="slide-content">
+                <h2 className="section-heading"><i className="fas fa-folder-open"></i> {NAVIGATION_SCHEMA.find(n => n.id === "projects").label[lang]}</h2>
+                <div className="premium-grid">
+                  {t.projectsData.map((proj, idx) => {
+                    const isPersonal = ["History.job", "FStats"].includes(proj.title);
+                    return (
+                    <div
+                      className="premium-card project-card stagger-item"
+                      key={idx}
+                      onClick={() => setSelectedProject(proj)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedProject(proj); }}
+                    >
+                      <div className="project-card-click-hint">
+                        <i className="fas fa-arrow-up-right-from-square"></i>
+                      </div>
+                      <div>
+                        <span className={`project-badge ${isPersonal ? 'is-perso' : 'is-pro'}`}>
+                          <i className={isPersonal ? 'fas fa-user' : 'fas fa-briefcase'}></i>
+                          {isPersonal ? (lang === 'fr' ? 'Personnel' : 'Personal') : (lang === 'fr' ? 'Professionnel' : 'Professional')}
+                        </span>
+                        <h3 className="project-title">{proj.title}</h3>
+                        <p className="project-desc">{proj.desc}</p>
+                      </div>
+                      <div className="project-tags">
+                        {proj.tags.map(tag => (
+                          <span className="project-tag" key={tag}>
+                            <i className={getTagIcon(tag)}></i> {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </section>
+
+            <section id="contact" className="slide-section" ref={(el) => (slideRefs.current["contact"] = el)}>
+              <div className="slide-content">
+                <h2 className="section-heading"><i className="fas fa-paper-plane"></i> {NAVIGATION_SCHEMA.find(n => n.id === "contact").label[lang]}</h2>
+                <div className="premium-card stagger-item" style={{ textAlign: "center", maxWidth: "700px", margin: "0 auto" }}>
+                  <p style={{ fontSize: "1.2rem", color: "var(--text-secondary)", marginBottom: "2.5rem" }}>{t.contactData.subtitle}</p>
+                  
+                  <div className="contact-grid">
+                    <a href={`mailto:${t.contactData.email}`} className="premium-card contact-link-card">
+                      <div className="contact-icon-box"><i className="fas fa-envelope"></i></div>
+                      <span className="contact-label">Email</span>
+                      <span className="contact-value">{t.contactData.email}</span>
+                    </a>
+                    
+                    <a href="https://www.linkedin.com/in/alex-fahloune-812a56201/" target="_blank" rel="noopener noreferrer" className="premium-card contact-link-card">
+                      <div className="contact-icon-box"><i className="fab fa-linkedin-in"></i></div>
+                      <span className="contact-label">LinkedIn</span>
+                      <span className="contact-value">alex-fahloune</span>
+                    </a>
+
+                    <a href="https://github.com/alexFahl" target="_blank" rel="noopener noreferrer" className="premium-card contact-link-card">
+                      <div className="contact-icon-box"><i className="fab fa-github"></i></div>
+                      <span className="contact-label">GitHub</span>
+                      <span className="contact-value">alexFahl</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </div>
+
+          <div className={`dock-container ${currentSlide === "home" ? "is-collapsed" : ""}`}>
+            <nav className="dock-nav">
+              <div className="dock-nav-group">
+                {NAVIGATION_SCHEMA.map((node) => (
+                  <button
+                    key={node.id}
+                    className={`dock-btn ${currentSlide === node.id ? "is-active" : ""}`}
+                    data-label={node.label[lang]}
+                    onClick={() => navigateToSlide(node.id)}
+                    aria-label={node.label[lang]}
+                  >
+                    <i className={node.icon}></i>
+                  </button>
+                ))}
+                
+                <div className="dock-separator"></div>
+              </div>
+              
+              <button 
+                className="dock-btn" 
+                onClick={() => setIsLightMode(!isLightMode)}
+                data-label={isLightMode ? (lang === "fr" ? "Mode Sombre" : "Dark Mode") : (lang === "fr" ? "Mode Clair" : "Light Mode")}
+              >
+                <i className={isLightMode ? "fas fa-moon" : "fas fa-sun"}></i>
+              </button>
+
+              <button 
+                className="dock-btn lang-toggle-btn" 
+                onClick={() => setLang(lang === "fr" ? "en" : "fr")}
+                data-label={lang === "fr" ? "English version" : "Version Française"}
+              >
+                {lang === "fr" ? "EN" : "FR"}
+              </button>
+            </nav>
+          </div>
+
+          <div className="progress-dots">
+            {NAVIGATION_SCHEMA.map((node) => (
+              <div
+                key={node.id}
+                className={`progress-dot ${currentSlide === node.id ? "is-active" : ""}`}
+                onClick={() => navigateToSlide(node.id)}
+                title={node.label[lang]}
+              />
+            ))}
+          </div>
+
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+            isLightMode={isLightMode}
+            lang={lang}
+          />
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
